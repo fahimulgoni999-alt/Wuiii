@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Saiba!</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #ff758c;
+            --secondary-color: #ff7eb3;
+            --text-color: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            padding: 20px;
+        }
+
+        .title {
+            color: #fff;
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+            animation: fadeInDown 1s ease;
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.28);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 35px 30px;
+            max-width: 440px;
+            margin: 0 auto;
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .profile-pic {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #fff;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            margin-bottom: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.05);
+        }
+
+        .subtitle {
+            font-size: 1.15rem;
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 18px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+        }
+
+        .hidden-message {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.7s ease-in-out;
+            color: var(--text-color);
+            background: rgba(255, 255, 255, 0.88);
+            border-radius: 14px;
+            padding: 0 20px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .hidden-message.show {
+            max-height: 320px;
+            opacity: 1;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .hidden-message p {
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            background: #fff;
+            color: var(--primary-color);
+            border: none;
+            padding: 12px 32px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--primary-color);
+            color: #fff;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 117, 140, 0.4);
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #confetti {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <h1 class="title">Happy Birthday, Saiba! ✨</h1>
+        
+        <div class="glass-card">
+            <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=600&q=80" alt="Birthday Celebration" class="profile-pic">
+            
+            <p class="subtitle">Wishing you a fabulous day filled with love & smiles!</p>
+            
+            <div id="secretMessage" class="hidden-message">
+                <p>Dear Saiba,</p>
+                <p>May your day be filled with lots of happiness, sweet moments, and joy. Wishing you another wonderful year of exciting adventures and success! 🎂🎉</p>
+                <p>Have an amazing celebration!</p>
+            </div>
+
+            <button id="revealBtn" class="btn">Tap for a Surprise 🎁</button>
+        </div>
+    </div>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confetti"></canvas>
+
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const revealBtn = document.getElementById('revealBtn');
+            const secretMessage = document.getElementById('secretMessage');
+
+            revealBtn.addEventListener('click', () => {
+                secretMessage.classList.toggle('show');
+
+                if (secretMessage.classList.contains('show')) {
+                    revealBtn.textContent = 'Close Message 💖';
+                    triggerConfetti();
+                } else {
+                    revealBtn.textContent = 'Tap for a Surprise 🎁';
+                }
+            });
+
+            function triggerConfetti() {
+                var duration = 3 * 1000;
+                var animationEnd = Date.now() + duration;
+                var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
+
+                function randomInRange(min, max) {
+                    return Math.random() * (max - min) + min;
+                }
+
+                var interval = setInterval(function() {
+                    var timeLeft = animationEnd - Date.now();
+
+                    if (timeLeft <= 0) {
+                        return clearInterval(interval);
+                    }
+
+                    var particleCount = 50 * (timeLeft / duration);
+                    
+                    confetti(Object.assign({}, defaults, { 
+                        particleCount,
+                        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+                    }));
+                    confetti(Object.assign({}, defaults, { 
+                        particleCount,
+                        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+                    }));
+                }, 250);
+            }
+        });
+    </script>
+</body>
+</html>
